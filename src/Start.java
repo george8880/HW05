@@ -89,7 +89,7 @@ public class Start extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
     	numLetters = (String)(patternList.getSelectedItem());
     	numGuesses = (String)(patternList1.getSelectedItem());
-    	frame.dispose();
+    	frame.setVisible(false);
     	new GUI_PlayGame(Integer.parseInt(numLetters), Integer.parseInt(numGuesses)).show();
 
     }

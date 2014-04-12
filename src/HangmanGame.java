@@ -5,17 +5,22 @@ public class HangmanGame
 	protected int secretWordLength; // the length of the secret string
 	protected int guessesRemaining; //to store the number of guess for the user
 	protected int numLettersRemaining; //to store the number of the letters in the secret word has not been guessed correctly
-	protected String currentState = ""; //store the current guessing situation
+	protected char[] currentState; //store the current guessing situation
 	protected String letterGuessHistory = ""; //store the letter user has tried
 	protected char letterGuess; //the letter the user guess right now
 	protected boolean guessResult;
 	
 	
-	public HangmanGame(String secretWord, int numGuesses, String letterHistory) {
+	public HangmanGame(String secretWord, int stringLength, int numGuesses, String letterHistory) {
 		this.secretWord = secretWord;
-		secretWordLength = secretWord.length();
+		secretWordLength = stringLength;
 		guessesRemaining = numGuesses;
 		letterGuessHistory = letterHistory;
+		numLettersRemaining = stringLength;
+		
+		currentState = new char[stringLength];
+		for (int i = 0; i < secretWordLength; i++)
+			currentState[i] = '_';
 	}
 	
     /**
@@ -78,7 +83,12 @@ public class HangmanGame
      * @return a String of the current state of the secret word.
      */
     public String displayGameState() {
-    	return currentState;
+    	String result = "";
+    	
+    	for (char c : currentState)
+    		result += c + " ";
+    	
+    	return result;
     }
     
     /**

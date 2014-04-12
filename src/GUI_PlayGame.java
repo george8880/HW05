@@ -122,7 +122,7 @@ public class GUI_PlayGame implements ActionListener
         {
             if (game.isWin())
             {
-                new GUI_Winner(game.displayGameState(),frame);
+                new GUI_Winner(game.getSecretWord(),frame);
             }
             else
             {

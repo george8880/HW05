@@ -22,12 +22,12 @@ public class NormalHangMan extends HangmanGame {
      * @param numGuesses the number of guesses allowed
      */
     public NormalHangMan(String secretWord, int numGuesses, String letterHistory){
-    	super(secretWord, numGuesses, letterHistory);
-    	
-        numLettersRemaining = secretWordLength;
+    	super(secretWord, secretWord.length(), numGuesses, letterHistory);
+
+    	//update numLettersRemaining because there is a word now
         for(int i = 0; i < secretWordLength; i++)
         {
-            currentState += "_ ";
+            currentState[i] = '_';
             for(int j = i; j > 0; j--)
             {
                 if(secretWord.charAt(i) == secretWord.charAt(j-1))
@@ -76,15 +76,10 @@ public class NormalHangMan extends HangmanGame {
     public boolean updateState(char ch) {
         for (int i = 0; i < secretWordLength; i++) {
             if (secretWord.charAt(i) == ch) {//if the user guess right, adjust the current state.
-                String temp = "";
-                for (int j = 0; j < secretWordLength; j++) {
+                for (int j = 0; j < secretWordLength; j++)
                     if (secretWord.charAt(j) == ch)
-                        temp = temp + ch + " ";
-                    else
-                        temp = temp + currentState.charAt(2*j) + currentState.charAt(2*j+1); 
-                }
-                
-                currentState = temp;
+                        currentState[j] = ch; 
+
                 return true;
             }
         }

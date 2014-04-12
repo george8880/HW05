@@ -26,8 +26,6 @@ public abstract class ResultFrame implements ActionListener {
         ImageIcon resultIcon = new ImageIcon(imagePath);
         JLabel resultLabel = new JLabel(resultIcon);
     	resultFrame.setSize(new Dimension(Math.max(resultIcon.getIconWidth(), answerLabel.getWidth()),470));
-        System.out.println(resultIcon.getIconWidth());
-        System.out.println(Math.max(resultIcon.getIconWidth(), answerLabel.getWidth()));
     	
         resultFrame.add(answerLabel);
         resultFrame.add(gameResultLabel);
@@ -41,6 +39,6 @@ public abstract class ResultFrame implements ActionListener {
     public void actionPerformed(ActionEvent e){
         resultFrame.dispose();
         parentFrame.dispose();
-    	new Start().createAndShowGUI();
+    	Start.frame.setVisible(true);
     }	
 }

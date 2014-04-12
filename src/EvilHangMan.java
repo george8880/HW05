@@ -6,10 +6,7 @@ public class EvilHangMan extends HangmanGame {
 	private ArrayList<String> wordlist = new ArrayList<String>();// to store the dictionary
 
 	public EvilHangMan(int stringLength, int numGuesses) {
-		super("", numGuesses, "");	
-		secretWordLength = stringLength; //override from super constructor
-		numLettersRemaining = stringLength;
-		guessResult = false;
+		super("", stringLength, numGuesses, "");	
 		
 		Scanner scanner = null;
 		try {
@@ -22,9 +19,6 @@ public class EvilHangMan extends HangmanGame {
 			if (temp.length() == secretWordLength)
 				wordlist.add(temp);
 		}
-
-		for (int i = 0; i < secretWordLength; i++)
-			currentState += "_ ";
 	
 		scanner.close();
 
@@ -41,13 +35,15 @@ public class EvilHangMan extends HangmanGame {
 			ArrayList<String> deleted = new ArrayList<String>(); 
 			
 			for (int i = 0; i < wordlist.size(); i++)
-				for (int j = 0; j < secretWordLength; j++)
-					if (wordlist.get(i).charAt(j) == ch) {
-						deleted.add(wordlist.get(i));
+				for (int j = 0; j < secretWordLength; j++) {
+					String word = wordlist.get(i);
+					if (word.charAt(j) == ch) {
+						deleted.add(word);
 						wordlist.remove(i);
 						i--; //explore index again because of remove
 						break;
 					}
+				}
 
 			if (wordlist.size() == 0) {
 				System.out.println("wordlist size is zero!");
