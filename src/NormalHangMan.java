@@ -8,16 +8,8 @@
  * <p>This class can then be used by a user interface to administer a regular game of Hangman.</p>
  */
 import java.util.*;
-public class NormalHangMan implements HangmanGame
-{
-    
 
-	private String originSecretWord = "";//To store the secret word
-    private int guessesRemaining;//to store the number of guess for the user
-    private int numLettersLeft;//to store the number of the letters in the secret word has not been guessed correctly
-    private String currentState = "";//store the current guessing situation
-    private String history = "";//store the letter user has tried
-    private char guess;//the letter the user guess right now
+public class NormalHangMan extends HangmanGame {
 
     /**
      * Constructor sets up the game to be played with a word and some number of
@@ -29,115 +21,76 @@ public class NormalHangMan implements HangmanGame
      * @param secretWord the word that the player is trying to guess
      * @param numGuesses the number of guesses allowed
      */
-    public NormalHangMan(String secretWord, int numGuesses, String LetterHistory){
-        originSecretWord = secretWord;
-        guessesRemaining = numGuesses;
-        numLettersLeft = secretWord.length();
-        for(int i = 0; i < secretWord.length(); i++)
+    public NormalHangMan(String secretWord, int numGuesses, String letterHistory){
+    	super(secretWord, numGuesses, letterHistory);
+    	
+        numLettersRemaining = secretWordLength;
+        for(int i = 0; i < secretWordLength; i++)
         {
             currentState += "_ ";
             for(int j = i; j > 0; j--)
             {
                 if(secretWord.charAt(i) == secretWord.charAt(j-1))
                 {
-                    numLettersLeft--;//If the letter appears many times in the secret word, it will be counted just once.
+                    numLettersRemaining--;//If the letter appears many times in the secret word, it will be counted just once.
                     break;
                 }
             }
         }
-        history = LetterHistory;
     }   
-
-    public String getSecretWord()
-    {
-        return originSecretWord;
-    }
-    public int numGuessesRemaining()
-    {
-        return guessesRemaining;
-    }
-    public int numLettersRemaining()
-    {
-        return numLettersLeft;
-    }
-    public boolean isWin()
-    {
-        if (guessesRemaining == 0)
-            return false;//if the user has no chance to guess again, it means the user loses.
-        else
-            return true;
-    }
-    public boolean gameOver()
-    {
-        if (guessesRemaining == 0 || numLettersLeft == 0)
-            return true;
-        else
-            return false;
-    }
-    public String lettersGuessed()
-    {
-        return history;
-    }
-    public String displayGameState()
-    {
-        return currentState;
-    }
+    
+    /**
+     * Checks if the character has already been guessed. If not, add character to guess history and 
+     * check if the character is in the secret word. If it is, update current state of guessing 
+     * and decrease number of letters remaining. Otherwise, remove 1 from number of guesses remaining
+     * 		@parameter: character guessed
+     * 		@return: whether the character guessed is in the secret word
+     * 		@modify: currentState      -- if character guessed IS in secret word
+     * 			     history           -- character guessed added to history
+     * 				 numLettersLeft    -- if character guessed IS in secret word
+     * 				 guessesRemaining  -- if character guessed IS NOT in secret word				 
+     */
+    @Override
     public boolean makeGuess(char ch)
     {
-    	if (Character.isLetter(ch) == false) return false;
-        boolean tempB = true;
-        guess = ch;
-        for (int i = 0; i < originSecretWord.length(); i++)
-        {
-            if (originSecretWord.charAt(i) == ch)//if the user guess right, adjust the current state.
-            {
+    	if (Character.isLetter(ch) == false || alreadyGuessed(ch)) return false;
+        
+    	letterGuessHistory += ch;
+    	
+    	boolean letterIsInWord = updateState(ch);
+    	
+    	if (letterIsInWord)
+    		numLettersRemaining--;
+    	else
+    		guessesRemaining--;
+    	
+    	return letterIsInWord;
+    }
+    
+    /**
+     * Updates current state of guessing if character is in secret word. Otherwise do nothing
+     * 		@parameter: character guessed
+     * 		@return: whether the character guessed is in the secret word
+     * 		@modify: currentState -- if character guessed IS in the secret word
+     */
+    public boolean updateState(char ch) {
+        for (int i = 0; i < secretWordLength; i++) {
+            if (secretWord.charAt(i) == ch) {//if the user guess right, adjust the current state.
                 String temp = "";
-                for (int j = 0; j < originSecretWord.length(); j++)
-                {
-                    if (originSecretWord.charAt(j) == ch)
-                    {
+                for (int j = 0; j < secretWordLength; j++) {
+                    if (secretWord.charAt(j) == ch)
                         temp = temp + ch + " ";
-                    }
                     else
-                    {
-                        temp = temp + currentState.charAt(2*j) + currentState.charAt(2*j+1);              
-                    }
+                        temp = temp + currentState.charAt(2*j) + currentState.charAt(2*j+1); 
                 }
+                
                 currentState = temp;
-                tempB = true;
-                break;
-            }
-            else
-            {
-                tempB = false;
+                return true;
             }
         }
-        if (!alreadyGuessed(ch))
-        {
-            history = history + guess;
-
-            if (tempB)
-            {
-                numLettersLeft--;
-            }
-            else
-            {
-                guessesRemaining--;
-            }
-            return tempB;
-        }
-        else return false;
+        
+        return false;
     }
-    
-    public boolean alreadyGuessed(char c)
-    {
-    	for (int i = 0; i < history.length(); i++) {
-    		if (history.charAt(i) == c) return true;
-    	}
-    	return false;
-    }
-    
-   
 }
     
        

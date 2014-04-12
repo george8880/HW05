@@ -169,4 +169,50 @@ public class NormalHangmanTest {
 		assertTrue(hm.gameOver());
 		assertFalse(hm.isWin());
 	}
+	
+	@Test
+	public void testUpdateStateCorrectGuess1() {
+		boolean correct = hm.updateState('S');
+		assertEquals("S _ _ _ _ _ _ _ _ ", hm.displayGameState());
+		assertTrue(correct);
+	}
+	
+	@Test
+	public void testUpdateStateCorrectGuess2() {
+		boolean correct = hm.updateState('O');
+		assertEquals("_ _ O _ _ _ _ O _ ", hm.displayGameState());
+		assertTrue(correct);
+	}
+	
+	@Test
+	public void testUpdateStateCorrectGuessExistingState() {
+		boolean correct = hm.updateState('O');
+		assertEquals("_ _ O _ _ _ _ O _ ", hm.displayGameState());
+		assertTrue(correct);
+		
+		correct = hm.updateState('S');
+		assertEquals("S _ O _ _ _ _ O _ ", hm.displayGameState());
+		assertTrue(correct);
+	}
+	
+	@Test
+	public void testUpdateStateIncorrectGuess() {
+		boolean correct = hm.updateState('X');
+		assertEquals("_ _ _ _ _ _ _ _ _ ", hm.displayGameState());
+		assertFalse(correct);
+	}
+	
+	@Test
+	public void testUpdateStateIncorrectGuessExistingState() {
+		boolean correct = hm.updateState('O');
+		assertEquals("_ _ O _ _ _ _ O _ ", hm.displayGameState());
+		assertTrue(correct);
+		
+		correct = hm.updateState('X');
+		assertEquals("_ _ O _ _ _ _ O _ ", hm.displayGameState());
+		assertFalse(correct);
+	}
+	
+	
+	
 }

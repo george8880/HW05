@@ -1,10 +1,29 @@
-public interface HangmanGame
+public class HangmanGame
 {
 
+	protected String secretWord = ""; //To store the secret word
+	protected int secretWordLength; // the length of the secret string
+	protected int guessesRemaining; //to store the number of guess for the user
+	protected int numLettersRemaining; //to store the number of the letters in the secret word has not been guessed correctly
+	protected String currentState = ""; //store the current guessing situation
+	protected String letterGuessHistory = ""; //store the letter user has tried
+	protected char letterGuess; //the letter the user guess right now
+	protected boolean guessResult;
+	
+	
+	public HangmanGame(String secretWord, int numGuesses, String letterHistory) {
+		this.secretWord = secretWord;
+		secretWordLength = secretWord.length();
+		guessesRemaining = numGuesses;
+		letterGuessHistory = letterHistory;
+	}
+	
     /**
      * @return the original secret word.
      */
-    public String getSecretWord();
+    public String getSecretWord() {
+    	return secretWord;
+    }
     
     /**
      * Simulates the player guessing a letter in the word and updates the state of game
@@ -17,23 +36,29 @@ public interface HangmanGame
      * @param ch the char that is the next letter to be guessed on the word
      * @return true if the game isn't over and the guessed letter was in the word, false otherwise
      */
-    public boolean makeGuess(char ch);
+    public boolean makeGuess(char ch) { return false; }
      
     
     /**
      * @return true if there are no more letters to be guessed and there is still at least one guess remaining
      */
-    public boolean isWin(); 
+    public boolean isWin() {
+    	return (guessesRemaining == 0) ? false : true;
+    }
     
     /** 
      * @return true if either num guesses remaining is 0 or num letters remaining to be guessed is 0.
      */
-    public boolean gameOver(); 
+    public boolean gameOver() {
+    	return (guessesRemaining == 0 || numLettersRemaining == 0) ? true : false;
+    }
     
     /**
      * @return the number of guesses the player has left
      */
-    public int numGuessesRemaining();
+    public int numGuessesRemaining() {
+    	return guessesRemaining;
+    }
     
     /**
      * The number of letters remaining to be guessed in the secret word - i.e.
@@ -41,7 +66,9 @@ public interface HangmanGame
      * the actually number of letters it will take to fill those blanks.
      * @return the number of letters in the secret word that still have to be guessed
      */
-    public int numLettersRemaining();
+    public int numLettersRemaining() {
+    	return numLettersRemaining;
+    }
     
     /**
      * Gives a display-ready String-ified version of the current state of the secret word, showing letters
@@ -50,12 +77,29 @@ public interface HangmanGame
      * the method might return something like "L A B _ R A _ _ R Y"
      * @return a String of the current state of the secret word.
      */
-    public String displayGameState();
+    public String displayGameState() {
+    	return currentState;
+    }
     
     /**
      * A String representing the letters guessed so far in the order they were guessed.
      * Duplicates should not be added.
      * @return a String showing which letters have already been guessed.
      */
-    public String lettersGuessed();
+    public String lettersGuessed() {
+    	return letterGuessHistory;
+    }
+    
+    /**
+     * Checks if character has already been guessed
+     * @param c: character guessed
+     * @return if character has already been guessed
+     */
+    public boolean alreadyGuessed(char c)
+    {
+    	for (int i = 0; i < letterGuessHistory.length(); i++) {
+    		if (letterGuessHistory.charAt(i) == c) return true;
+    	}
+    	return false;
+    }
 }
